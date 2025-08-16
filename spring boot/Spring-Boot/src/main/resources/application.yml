@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: docker
+    
+  server:
+    port: 8081  # <-- Fixed indentation
+  
+  application:
+    name: Spring-Boot
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/pravin  # Use the service name from Docker Compose
+    username: pravin
+    password: pravin
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://servicereg:8761/eureka/  # Required for service registration
+    register-with-eureka: true
+    fetch-registry: true

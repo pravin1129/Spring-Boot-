@@ -1,0 +1,72 @@
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pravin
+      POSTGRES_PASSWORD: pravin
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"
+    networks:
+      - my-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pravin.chavan2729@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pravin
+    ports:
+      - "5050:80"
+    networks:
+      - my-network
+    depends_on:
+      - postgres
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - my-network
+
+  servicereg:
+    image: pravin1129/servicereg
+    container_name: servicereg
+    restart: always
+    environment:
+      SPRING_PROFILE_ACTIVE: docker
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+    depends_on:
+      - postgres
+
+  springbootappimage:
+    image: pravin1129/springbootappimage
+    container_name: springbootappimage
+    restart: always
+    environment:
+      SPRING_PROFILE_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://servicereg:8761/eureka/
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+    depends_on:
+      - postgres
+      - servicereg
+
+networks:
+  my-network:
+
+volumes:
+  postgres-data:

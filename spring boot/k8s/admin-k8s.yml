@@ -1,0 +1,10 @@
+apiVersion: v1               # API version used for the resource
+kind: Pod                    # Type of Kubernetes object (Pod, Service, Deployment, etc.)
+metadata:
+  name: my-pod               # Name of the object
+  labels:                    # Optional: key-value tags
+    app: my-app
+spec:                        # Specification of the object
+  containers:                # Only for Pod-type objects
+    - name: nginx
+      image: nginx:latest
